@@ -7,7 +7,10 @@ int main() {
     scanf("%d", &n);
 
     int cost[n][n];
+    int visited[n];
+    int current_city, next_city, min_cost, total_cost = 0;
 
+    // Input the distance matrix
     printf("Enter the distance between cities:\n");
     for (i = 0; i < n; i++) {
         for (j = 0; j < n; j++) {
@@ -15,38 +18,51 @@ int main() {
         }
     }
 
-    int visited[n], current_city, next_city, min_cost, total_cost = 0;
+    // Initialize visited array
+    for (i = 0; i < n; i++) {
+        visited[i] = 0; // Mark all cities as unvisited
+    }
 
-    // Mark the starting city as visited
-    printf("Enter the starting city: ");
+    // Input starting city
+    printf("Enter the starting city (0 to %d): ", n - 1);
     scanf("%d", &current_city);
+
+    // Validate starting city
+    if (current_city < 0 || current_city >= n) {
+        printf("Invalid starting city!\n");
+        return 1;
+    }
+
+    printf("Path: %d", current_city);
     visited[current_city] = 1;
 
-    while (1) {
-        min_cost = 9999;
+    // Visit all cities
+    for (int count = 1; count < n; count++) {
+        min_cost = 9999;  // Large initial value
         next_city = -1;
 
         // Find the nearest unvisited city
         for (i = 0; i < n; i++) {
-            if (visited[i] == 0 && cost[current_city][i] != 0 && cost[current_city][i] < min_cost) {
+            if (!visited[i] && cost[current_city][i] > 0 && cost[current_city][i] < min_cost) {
                 min_cost = cost[current_city][i];
                 next_city = i;
             }
         }
 
-        // If no unvisited city is found, break the loop
+        // If no unvisited city is found
         if (next_city == -1) {
-            break;
+            printf("\nError: Unable to find the next city.\n");
+            return 1;
         }
 
-        // Mark the next city as visited
+        // Move to the next city
         visited[next_city] = 1;
-        total_cost += cost[current_city][next_city];
-        current_city = next_city;
+        total_cost += min_cost;
         printf(" -> %d", next_city);
+        current_city = next_city;
     }
 
-    // Add the cost of returning to the starting city
+    // Return to the starting city
     total_cost += cost[current_city][0];
     printf(" -> %d\n", 0);
 
