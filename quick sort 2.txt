@@ -1,0 +1,80 @@
+#include <stdio.h>
+#include <time.h>
+
+int a[100];
+
+// Partition function for Quick Sort
+int partition(int low, int high) {
+    int temp;
+    int pivot = a[low];
+    int i = low + 1;
+    int j = high;
+
+    do {
+        // Increment i until a[i] > pivot
+        while (i <= high && a[i] <= pivot) {
+            i++;
+        }
+        // Decrement j until a[j] <= pivot
+        while (j >= low && a[j] > pivot) {
+            j--;
+        }
+        if (i < j) {
+            // Swap a[i] and a[j]
+            temp = a[i];
+            a[i] = a[j];
+            a[j] = temp;
+        }
+    } while (i < j);
+
+    // Swap pivot with a[j]
+    temp = a[low];
+    a[low] = a[j];
+    a[j] = temp;
+    return j; // Return the partition index
+}
+
+// Quick Sort function
+void quicksort(int low, int high) {
+    if (low < high) {
+        int partitionIndex = partition(low, high);
+        quicksort(low, partitionIndex - 1);   // Sort left subarray
+        quicksort(partitionIndex + 1, high);  // Sort right subarray
+    }
+}
+
+// Main function
+int main() {
+    int i, n;
+    clock_t start, end;
+
+    // Input array size
+    printf("Enter size of an array: ");
+    scanf("%d", &n);
+
+    // Input array elements
+    printf("Enter array elements: ");
+    for (i = 0; i < n; i++) {
+        scanf("%d", &a[i]);
+    }
+
+    // Start measuring time
+    start = clock();
+    quicksort(0, n - 1);  // Sorting
+    end = clock();
+
+    // Calculate time taken
+    double executionTime = (double)(end - start) / CLOCKS_PER_SEC;
+
+    // Output the sorted array
+    printf("Array after sorting: ");
+    for (i = 0; i < n; i++) {
+        printf("%d\t", a[i]);
+    }
+    printf("\n");
+
+    // Output the execution time
+    printf("Execution time: %.6f seconds\n", executionTime);
+
+    return 0;
+}
