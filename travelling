@@ -1,0 +1,56 @@
+#include <stdio.h>
+
+int main() {
+    int n, i, j;
+
+    printf("Enter the number of cities: ");
+    scanf("%d", &n);
+
+    int cost[n][n];
+
+    printf("Enter the distance between cities:\n");
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
+            scanf("%d", &cost[i][j]);
+        }
+    }
+
+    int visited[n], current_city, next_city, min_cost, total_cost = 0;
+
+    // Mark the starting city as visited
+    printf("Enter the starting city: ");
+    scanf("%d", &current_city);
+    visited[current_city] = 1;
+
+    while (1) {
+        min_cost = 9999;
+        next_city = -1;
+
+        // Find the nearest unvisited city
+        for (i = 0; i < n; i++) {
+            if (visited[i] == 0 && cost[current_city][i] != 0 && cost[current_city][i] < min_cost) {
+                min_cost = cost[current_city][i];
+                next_city = i;
+            }
+        }
+
+        // If no unvisited city is found, break the loop
+        if (next_city == -1) {
+            break;
+        }
+
+        // Mark the next city as visited
+        visited[next_city] = 1;
+        total_cost += cost[current_city][next_city];
+        current_city = next_city;
+        printf(" -> %d", next_city);
+    }
+
+    // Add the cost of returning to the starting city
+    total_cost += cost[current_city][0];
+    printf(" -> %d\n", 0);
+
+    printf("Total distance: %d\n", total_cost);
+
+    return 0;
+}
