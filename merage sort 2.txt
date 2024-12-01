@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include<time.h>
+int a[100];
+void merge(int low,int mid,int high)
+{
+    int temp[100];
+    int i=low;
+    int j=mid+1;
+    int k=low;
+    while((i<=mid) && (j<=high))
+    {
+        if(a[i]<a[j])
+        {
+            temp[k++]=a[i++];
+        }
+        else
+        {
+            temp[k++]=a[j++];
+        }
+    }
+    while(i<=mid)
+    {
+        temp[k++]=a[i++];
+    }
+    while(j<=high)
+    {
+        temp[k++]=a[j++];
+    }
+    for(i=low;i<=high;i++)
+    {
+        a[i]=temp[i];
+    }
+}
+void mergesort(int low,int high)
+{
+    int mid;
+    if(low!=high)
+    {
+        mid=(low+high)/2;
+        mergesort(low,mid);
+        mergesort(mid+1,high);
+        merge(low,mid,high);
+    }
+}
+int main()
+{
+    int i,n;
+    double l,p,d;
+    printf("Enter size of an array: ");
+    scanf("%d",&n);
+    printf("Enter array elements: ");
+    for(i=0;i<n;i++)
+    {
+        scanf("%d",&a[i]);
+    }
+    l=clock();
+    mergesort(0,n-1);
+    p=clock();
+    d = (double)(p - l) / CLOCKS_PER_SEC;
+    printf("Array after sorted: ");
+    for(i=0;i<n;i++)
+    {
+        printf("%d\t",a[i]);
+    }
+    printf("\n");
+    printf("Execution time:%.6f",d);
+}
